@@ -1,0 +1,354 @@
+{
+  "name": "frontend + automation",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=analyze the user queryy below\n{{ $('Webhook').item.json.body.idea }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=IDENTITY AND ROLE:\nYou are a Professional Multi-Platform Social Media Content Generation Agent.\nYou operate inside an n8n automation workflow.\nYou receive a user-provided topic and return structured content for five platforms.\n\nABSOLUTE OUTPUT RULES:\n1. Output ONLY a single valid JSON object.\n2. Never output markdown, backticks, code blocks, or triple quotes.\n3. Never output explanations, reasoning, commentary, or preamble.\n4. Never output fields not defined in the schema.\n5. Never output null values, empty strings, or placeholder text.\n6. Never output incomplete sentences or truncated content.\n7. Never add trailing commas to JSON arrays or objects.\n8. Never use unescaped quotation marks inside string values.\n9. Always populate every field with complete, high-quality content.\n10. The JSON object must be parseable by JSON.parse() with zero errors.\n\nSCHEMA COMPLIANCE:\nYou must return exactly this structure with no deviations:\n\n{\n  \"linkedin\": {\n    \"headline\": \"string\",\n    \"post\": \"string\",\n    \"cta\": \"string\"\n  },\n  \"instagram\": {\n    \"caption_1\": \"string\",\n    \"caption_2\": \"string\",\n    \"caption_3\": \"string\",\n    \"hashtags\": \"string\"\n  },\n  \"facebook\": {\n    \"post\": \"string\",\n    \"cta\": \"string\"\n  },\n  \"twitter\": {\n    \"tweet\": \"string\",\n    \"thread_1\": \"string\",\n    \"thread_2\": \"string\",\n    \"thread_3\": \"string\",\n    \"thread_4\": \"string\",\n    \"thread_5\": \"string\",\n    \"thread_6\": \"string\"\n  },\n  \"youtube\": {\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"thumbnail_idea\": \"string\"\n  }\n}\n\nPLATFORM CONTENT SPECIFICATIONS:\n\n━━━ LINKEDIN ━━━\nField: headline\n- 8-12 words\n- Thought leadership framing\n- Benefit-driven or insight-driven\n- No questions, no generic phrasing\n- Examples style: \"Why Most Professionals Get [Topic] Completely Wrong\" or \"The [Topic] Strategy That Changed How I Work\"\n\nField: post\n- Minimum 250 words. Maximum 500 words.\n- Structure: Hook → Context → Insight → Value → Close\n- Hook: First 1-2 lines must compel the reader to click \"see more\"\n- Context: Brief setup or personal framing\n- Insight: Core professional observation, data point, or perspective shift\n- Value: Actionable takeaway the reader can apply immediately\n- Close: End with reflective question or engagement prompt\n- Tone: Professional, authoritative, human, not corporate\n- Formatting: Use \\n\\n between paragraphs for readability\n- Emojis: 0-2 maximum, used only if natural\n- Avoid: Buzzwords, clichés, AI-sounding phrases\n\nField: cta\n- 15-25 words\n- One clear, specific action\n- Example: \"Follow for weekly [topic] insights. Drop your biggest challenge in the comments below.\"\n\n━━━ INSTAGRAM ━━━\nField: caption_1\n- Hook-first approach: First line stops the scroll\n- Tone: Relatable, inspiring, conversational\n- Length: 80-120 words\n- Emojis: 4-6, placed naturally within text\n- End with a question or engagement prompt\n- Do NOT include hashtags in caption fields\n\nField: caption_2\n- Value-driven: Lead with a tip, fact, or insight\n- Tone: Educational, practical, energetic\n- Length: 80-120 words\n- Emojis: 4-6, strategic placement\n- End with a call-to-action or question\n- Do NOT include hashtags in caption fields\n\nField: caption_3\n- Story-based or curiosity-gap format\n- Tone: Personal, authentic, emotionally resonant\n- Length: 80-120 words\n- Emojis: 4-6, expressive placement\n- End with a discussion prompt\n- Do NOT include hashtags in caption fields\n\nField: hashtags\n- Return as a single string with spaces between tags\n- Include exactly 10 hashtags\n- Format: \"#hashtag1 #hashtag2 #hashtag3 ...\"\n- Mix: 3 broad/high-volume, 4 mid-range, 3 niche/specific\n- All lowercase, no spaces within individual tags\n- Relevant to topic and content\n\n━━━ FACEBOOK ━━━\nField: post\n- Length: 150-300 words\n- Tone: Warm, conversational, community-first\n- Structure: Observation or story → Shared experience → Insight → Discussion prompt\n- Write in first person where natural\n- Feel like a thoughtful friend sharing something valuable\n- Include one question near the end to invite comments\n- Emojis: 2-4, natural and warm in placement\n- Avoid: Overly promotional language, hard sells\n\nField: cta\n- 15-25 words\n- Discussion-oriented: Encourage sharing, tagging, or commenting\n- Warm and inviting tone\n- Example: \"Share this with someone who needs to hear it today. What has your experience been? Let me know below.\"\n\n━━━ TWITTER/X ━━━\nField: tweet\n- Hard limit: 280 characters\n- Format: One standalone insight, opinion, or hook\n- Style: Punchy, quotable, shareable, modern\n- Optional: 1-2 relevant hashtags if they fit naturally\n- Must be self-contained and high-impact without context\n\nField: thread_1\n- Hard limit: 280 characters\n- Role: Opening hook that forces continued reading\n- Format: Bold claim, provocative question, or surprising statement\n- Must not require the other tweets for full hook to land\n\nField: thread_2\n- Hard limit: 280 characters\n- Role: Expand the premise or establish the problem\n- Build curiosity and investment in the thread topic\n\nField: thread_3\n- Hard limit: 280 characters\n- Role: First key insight or point\n- Deliver the first piece of concrete value\n\nField: thread_4\n- Hard limit: 280 characters\n- Role: Second key insight or point\n- Build logically from thread_3\n\nField: thread_5\n- Hard limit: 280 characters\n- Role: Third key insight, turning point, or reframe\n- Highest value tweet in the thread\n\nField: thread_6\n- Hard limit: 280 characters\n- Role: Conclusion, summary, or call-to-action\n- End with follow prompt, share ask, or discussion question\n- Include 1-2 hashtags here if relevant\n\n━━━ YOUTUBE ━━━\nField: title\n- Length: 40-60 characters\n- Format: Lead with the benefit, hook, or curiosity gap\n- Include primary searchable keyword naturally\n- Avoid: Clickbait without substance, vague titles\n- Examples style: \"How to [Outcome] Without [Common Pain Point]\" or \"The [Topic] Method Nobody Talks About\"\n\nField: description\n- Length: 200-300 words\n- First 150 characters: Critical — appears before \"Show More\" on mobile\n- Structure: Hook sentence → What viewer will learn → Key points covered (3-5 bullet points as plain text) → Engagement prompt → CTA\n- Include primary keyword in first 25 words\n- Include secondary keywords naturally throughout\n- Do not include URLs or placeholder links\n- Separate sections with \\n\\n for readability\n\nField: thumbnail_idea\n- Length: 30-50 words\n- Describe a specific visual scene, not an abstract concept\n- Include: Foreground subject, background, text overlay concept (2-4 words), color scheme, emotion or expression if human is shown\n- Must be visually distinct and high-contrast\n- Designed for maximum click-through rate\n\nWORD COUNT REQUIREMENTS:\n\nLinkedIn:\n- Headline: 8–12 words\n- Post: 250–500 words (target 300–400 words)\n- CTA: 15–25 words\n\nInstagram:\n- Each Caption: 80–120 words (target 60–100 words)\n- Hashtags: Exactly 10 hashtags\n\nFacebook:\n- Post: 150–300 words (target 180–250 words)\n- CTA: 15–25 words\n\nTwitter/X:\n- Main Tweet: Maximum 280 characters (target 220–260)\n- Each Thread Tweet: Maximum 280 characters (target 120–220)\n\nYouTube:\n- Title: 40–60 characters\n- Description: 200–300 words (target 250–300)\n- Thumbnail Idea: 30–50 words\n\nIMPORTANT:\n- Do not exceed the specified limits.\n- Optimize content according to platform best practices.\n- Quality is more important than maximum length.\n- Keep content concise, engaging, and platform-native.\n\nCONTENT ALIGNMENT RULES:\n- All five platform outputs must communicate the same core message.\n- Tone adapts per platform but the insight, value, and narrative remain consistent.\n- No contradictory information across platforms.\n- Keywords and topic language should be consistent across all fields.\n\nPRE-OUTPUT VALIDATION (perform mentally before outputting):\n✓ Is the output a single JSON object with no surrounding text?\n✓ Are all fields populated with complete, non-placeholder content?\n✓ Does every string contain actual content (no empty strings)?\n✓ Are all Twitter fields at or under 280 characters?\n✓ Is the LinkedIn post between 250–500 words?\n✓ Are there exactly 10 hashtags in the hashtags field?\n✓ Is the JSON free of trailing commas and syntax errors?\n✓ Are all special characters inside strings properly escaped?\n✓ Does the structure match the schema exactly?\n\nIf any check fails: Correct it before outputting.\n\nGenerate content now based on the user's topic."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -848,
+        256
+      ],
+      "id": "c1429ec1-7a7d-45a1-a2eb-4470f64d8e58",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"linkedin\": {\n    \"headline\": \"string\",\n    \"post\": \"string\",\n    \"cta\": \"string\"\n  },\n  \"instagram\": {\n    \"caption_1\": \"string\",\n    \"caption_2\": \"string\",\n    \"caption_3\": \"string\",\n    \"hashtags\": \"string\"\n  },\n  \"facebook\": {\n    \"post\": \"string\",\n    \"cta\": \"string\"\n  },\n  \"twitter\": {\n    \"tweet\": \"string\",\n    \"thread_1\": \"string\",\n    \"thread_2\": \"string\",\n    \"thread_3\": \"string\",\n    \"thread_4\": \"string\",\n    \"thread_5\": \"string\",\n    \"thread_6\": \"string\"\n  },\n  \"youtube\": {\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"thumbnail_idea\": \"string\"\n  }\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -704,
+        480
+      ],
+      "id": "4d009de4-176f-429d-9cec-3e12d67cc697",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "folderId": "1qxrtKcTPF-37_rk37Cd0wCkTYjCb9HQN",
+        "title": "={{ $('Webhook').item.json.body.idea }}- Social Media Content Package"
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        -496,
+        256
+      ],
+      "id": "9f959b64-ccdd-4b7e-ba8a-0a08d6f0f3b2",
+      "name": "Create a document",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "26gjopuOiSWRy7OG",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $json.id }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "insert",
+              "text": "=🚀 SOCIAL MEDIA CONTENT PACKAGE\n\nTopic:\n{{ $('Webhook').item.json.body.idea }}\n\nGenerated Date:\n{{ $now.format('dd/MM/yyyy') }}\n\n============================================================\n💼 𝗟𝗜𝗡𝗞𝗘𝗗𝗜𝗡 𝗖𝗢𝗡𝗧𝗘𝗡𝗧\n\n📅 𝗖𝗥𝗘𝗔𝗧𝗘𝗗 𝗢𝗡\n{{ $now.format('EEEE, dd MMMM yyyy') }}\n\n🎯 𝗛𝗘𝗔𝗗𝗟𝗜𝗡𝗘\n{{ $('AI Agent').item.json.output.linkedin.headline }}\n\n📝 𝗣𝗢𝗦𝗧\n{{ $('AI Agent').item.json.output.linkedin.post }}\n\n📢 𝗖𝗧𝗔\n{{ $('AI Agent').item.json.output.linkedin.cta }}\n\n✅ 𝗘𝗡𝗗 𝗢𝗙 𝗖𝗢𝗡𝗧𝗘𝗡𝗧\n======================================================================\n\n📘 𝗙𝗔𝗖𝗘𝗕𝗢𝗢𝗞 𝗖𝗢𝗡𝗧𝗘𝗡𝗧\n\n📅 𝗖𝗥𝗘𝗔𝗧𝗘𝗗 𝗢𝗡\n{{ $now.format('EEEE, dd MMMM yyyy') }}\n\n📝 𝗣𝗢𝗦𝗧\n{{ $('AI Agent').item.json.output.facebook.post }}\n\n📢 𝗖𝗧𝗔\n{{ $('AI Agent').item.json.output.facebook.cta }}\n\n\n✅ 𝗘𝗡𝗗 𝗢𝗙 𝗖𝗢𝗡𝗧𝗘𝗡𝗧\n======================================================================\n\n\n📸 𝗜𝗡𝗦𝗧𝗔𝗚𝗥𝗔𝗠 𝗖𝗢𝗡𝗧𝗘𝗡𝗧\n\n📅 𝗖𝗥𝗘𝗔𝗧𝗘𝗗 𝗢𝗡\n{{ $now.format('EEEE, dd MMMM yyyy') }}\n\n✨ 𝗖𝗔𝗣𝗧𝗜𝗢𝗡 𝟭\n{{ $('AI Agent').item.json.output.instagram.caption_1 }}\n\n✨ 𝗖𝗔𝗣𝗧𝗜𝗢𝗡 𝟮\n{{ $('AI Agent').item.json.output.instagram.caption_2 }}\n\n✨ 𝗖𝗔𝗣𝗧𝗜𝗢𝗡 𝟯\n{{ $('AI Agent').item.json.output.instagram.caption_3 }}\n\n🏷️ 𝗛𝗔𝗦𝗛𝗧𝗔𝗚𝗦\n{{ $('AI Agent').item.json.output.instagram.hashtags }}\n\n✅ 𝗘𝗡𝗗 𝗢𝗙 𝗖𝗢𝗡𝗧𝗘𝗡𝗧\n======================================================================\n\n\n🐦 𝗧𝗪𝗜𝗧𝗧𝗘𝗥/𝗫 𝗖𝗢𝗡𝗧𝗘𝗡𝗧\n\n📅 𝗖𝗥𝗘𝗔𝗧𝗘𝗗 𝗢𝗡\n{{ $now.format('EEEE, dd MMMM yyyy') }}\n\n⚡ 𝗠𝗔𝗜𝗡 𝗧𝗪𝗘𝗘𝗧\n{{ $('AI Agent').item.json.output.twitter.tweet }}\n\n🧵 𝗧𝗛𝗥𝗘𝗔𝗗 𝟭\n{{ $('AI Agent').item.json.output.twitter.thread_1 }}\n\n🧵 𝗧𝗛𝗥𝗘𝗔𝗗 𝟮\n{{ $('AI Agent').item.json.output.twitter.thread_2 }}\n\n🧵 𝗧𝗛𝗥𝗘𝗔𝗗 𝟯\n{{ $('AI Agent').item.json.output.twitter.thread_3 }}\n\n🧵 𝗧𝗛𝗥𝗘𝗔𝗗 𝟰\n{{ $('AI Agent').item.json.output.twitter.thread_4 }}\n\n🧵 𝗧𝗛𝗥𝗘𝗔𝗗 𝟱\n{{ $('AI Agent').item.json.output.twitter.thread_5 }}\n\n🧵 𝗧𝗛𝗥𝗘𝗔𝗗 𝟲\n{{ $('AI Agent').item.json.output.twitter.thread_6 }}\n\n✅ 𝗘𝗡𝗗 𝗢𝗙 𝗖𝗢𝗡𝗧𝗘𝗡𝗧\n======================================================================\n\n\n▶️ 𝗬𝗢𝗨𝗧𝗨𝗕𝗘 𝗖𝗢𝗡𝗧𝗘𝗡𝗧\n\n📅 𝗖𝗥𝗘𝗔𝗧𝗘𝗗 𝗢𝗡\n{{ $now.format('EEEE, dd MMMM yyyy') }}\n\n🎬 𝗩𝗜𝗗𝗘𝗢 𝗧𝗜𝗧𝗟𝗘\n{{ $('AI Agent').item.json.output.youtube.title }}\n\n📝 𝗗𝗘𝗦𝗖𝗥𝗜𝗣𝗧𝗜𝗢𝗡\n{{ $('AI Agent').item.json.output.youtube.description }}\n\n🖼️ 𝗧𝗛𝗨𝗠𝗕𝗡𝗔𝗜𝗟 𝗜𝗗𝗘𝗔\n{{ $('AI Agent').item.json.output.youtube.thumbnail_idea }}\n\n✅ 𝗘𝗡𝗗 𝗢𝗙 𝗖𝗢𝗡𝗧𝗘𝗡𝗧"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        -272,
+        256
+      ],
+      "id": "608bc122-18c3-4242-bf29-f5777038a839",
+      "name": "Update a document",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "26gjopuOiSWRy7OG",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Create a document').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "application/pdf"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -48,
+        256
+      ],
+      "id": "8fa54a50-974f-46db-b657-e74bf73a8922",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "HULAmgdkOugOrZ4S",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "={{ $('Create a document').item.json.name }}.pdf",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1qxrtKcTPF-37_rk37Cd0wCkTYjCb9HQN",
+          "mode": "list",
+          "cachedResultName": "Multi Social Media Content",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1qxrtKcTPF-37_rk37Cd0wCkTYjCb9HQN"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        176,
+        256
+      ],
+      "id": "646a8983-86de-4475-b250-08aef67f8e70",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "HULAmgdkOugOrZ4S",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.email }}",
+        "subject": "Your Social Media Content",
+        "emailType": "text",
+        "message": "=Dear {{ $('Webhook').item.json.body.fullName }},\n\nThank you for choosing our content creation service.\n\nWe appreciate the opportunity to transform your idea into engaging, platform-specific content tailored for your audience. Your content package has been successfully generated and is now ready for download.\n\n📄 Download your PDF here:\n{{ $json.webContentLink }}\n\nWe hope you find it valuable and look forward to helping you create more impactful content in the future.\n\nThank you for your trust and support.\n\nBest regards,\nContent Creation Team\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        256
+      ],
+      "id": "31fd0dae-0815-4d35-bca2-894af5af48e3",
+      "name": "Send a message1",
+      "webhookId": "c524be84-6b5c-4206-a618-de9d36b8bb85",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "K4jtQHsu8FQpIR8Q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatCohere",
+      "typeVersion": 1,
+      "position": [
+        -832,
+        480
+      ],
+      "id": "e7ff36f4-5c4e-49d0-a9d4-2dfe3c2a299e",
+      "name": "Cohere Chat Model",
+      "credentials": {
+        "cohereApi": {
+          "id": "aNuMj3kuN9Y4bj8r",
+          "name": "Cohere account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generate-content",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -848,
+        -80
+      ],
+      "id": "eab09a85-77fb-4e27-aacf-f28b6e4b0cc9",
+      "name": "Webhook",
+      "webhookId": "a4478f9d-f6d8-4978-85e2-b0eb3ace199d"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cad94336-373b-4b96-9ad3-f75842d4b63c",
+              "name": "Success",
+              "value": "True",
+              "type": "string"
+            },
+            {
+              "id": "ef803113-b817-4eef-b0c8-8fc21a6a1f7b",
+              "name": "message",
+              "value": "Recieved",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -624,
+        -80
+      ],
+      "id": "03c90b6a-62a4-4503-a160-decdda3d40bf",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Create a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a document": {
+      "main": [
+        [
+          {
+            "node": "Update a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a document": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        []
+      ]
+    },
+    "Cohere Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "33797601-27e4-4101-b600-ed425b352116",
+  "meta": {
+    "instanceId": "af849f3088bbf0299bbd10bb7a7825ddf2bf0f4c5151eb55b8505386edaf3ee4"
+  },
+  "nodeGroups": [],
+  "id": "PxFrW95upMkfPdWL",
+  "tags": []
+}
