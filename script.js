@@ -6,7 +6,7 @@
  * WEBHOOK CONFIGURATION
  * Change this single variable to point to your n8n webhook URL.
  */
-const WEBHOOK_URL = "https://auto.technopixar.com/webhook-test/generate-content";
+const WEBHOOK_URL = "https://auto.technopixar.com/webhook/generate-content";
 
 
 /* ============================================================
